@@ -22,7 +22,7 @@ int main(void) {
 	/* Init Glew for Modern OpenGL */
 	if (glewInit() != GLEW_OK) {
 		printf("Error!");
-		return 1;
+		return -1;
 	}
 	printf("%s\n", glGetString(GL_VERSION));
 

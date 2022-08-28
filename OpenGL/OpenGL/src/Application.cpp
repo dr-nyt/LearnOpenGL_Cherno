@@ -19,10 +19,12 @@ int main(void) {
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
+	/* Init Glew for Modern OpenGL */
 	if (glewInit() != GLEW_OK) {
 		printf("Error!");
 		return 1;
 	}
+	printf("%s\n", glGetString(GL_VERSION));
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window)) {

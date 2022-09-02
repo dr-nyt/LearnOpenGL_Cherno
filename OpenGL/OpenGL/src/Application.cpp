@@ -15,6 +15,9 @@
 #include "Shader.h"
 #include "Texture.h"
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
 int main(void) {
 	GLFWwindow* window;
 
@@ -75,15 +78,20 @@ int main(void) {
 		// Create Index Buffer
 		IndexBuffer ib(indices, 6);
 
+		// Create Projection Matrix
+		glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+
 		// Create Shader Program
 		Shader shader("res/shaders/Basic.shader");
 		shader.Bind();
 
-		// Set Uniform
-		shader.SetUniform4f("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
-
+		// Create Texture
 		Texture texture("res/textures/bmwxv.png");
 		texture.Bind();
+
+		// Set Uniforms
+		shader.SetUniformMat4f("u_MVP", proj);
+		shader.SetUniform4f("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
 		shader.SetUniform1i("u_Texture", 0);
 
 		// Unbind all buffers
@@ -106,10 +114,8 @@ int main(void) {
 
 			renderer.Draw(va, ib, shader);
 
-			if (r > 1.0f)
-				increment = -0.05f;
-			else if (r < 0.0f)
-				increment = 0.05f;
+			if (r > 1.0f || r < 0.0f)
+				increment = -increment;
 
 			r += increment;
 

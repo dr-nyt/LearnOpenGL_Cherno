@@ -129,11 +129,11 @@ int main(void) {
 
 			ImGui_ImplGlfwGL3_NewFrame();
 
-			//shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
 			{
 				glm::mat4 model = glm::translate(glm::mat4(1.0f), translationA);
 				glm::mat4 mvp = proj * view * model;
 				shader.Bind();
+				shader.SetUniform4f("u_Color", r, 0.3f, 0.0f, 1.0f);
 				shader.SetUniformMat4f("u_MVP", mvp);
 				renderer.Draw(va, ib, shader);
 			}
@@ -142,6 +142,7 @@ int main(void) {
 				glm::mat4 model = glm::translate(glm::mat4(1.0f), translationB);
 				glm::mat4 mvp = proj * view * model;
 				shader.Bind();
+				shader.SetUniform4f("u_Color", 0.0f, 0.3f, r, 1.0f);
 				shader.SetUniformMat4f("u_MVP", mvp);
 				renderer.Draw(va, ib, shader);
 			}

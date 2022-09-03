@@ -30,7 +30,9 @@ int main(void) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(960, 540, "Hello World", NULL, NULL);
+	int width = 960;
+	int height = 540;
+	window = glfwCreateWindow(width, height, "Hello World", NULL, NULL);
 	if (!window) {
 		glfwTerminate();
 		return -1;
@@ -52,11 +54,13 @@ int main(void) {
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
 	{
+		int sWidth = 100;
+		int sHeight = 100;
 		float positions[] = {
-			100.0f, 100.0f, 0.0f, 0.0f,
-			200.0f, 100.0f, 1.0f, 0.0f,
-			200.0f, 200.0f, 1.0f, 1.0f,
-			100.0f, 200.0f, 0.0f, 1.0f
+			(width / 2) - (sWidth / 2), (height / 2) - (sHeight / 2), 0.0f, 0.0f,
+			(width / 2) + (sWidth / 2), (height / 2) - (sHeight / 2), 1.0f, 0.0f,
+			(width / 2) + (sWidth / 2), (height / 2) + (sHeight / 2), 1.0f, 1.0f,
+			(width / 2) - (sWidth / 2), (height / 2) + (sHeight / 2), 0.0f, 1.0f
 		};
 		unsigned int indices[] = {
 			0, 1, 2,
@@ -79,7 +83,11 @@ int main(void) {
 		IndexBuffer ib(indices, 6);
 
 		// Create Projection Matrix
-		glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
+		glm::mat4 proj = glm::ortho(0.0f, (float)width, 0.0f, (float)height, -1.0f, 1.0f);
+		glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-200, -200, 0));
+		glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200, 200, 0));
+
+		glm::mat4 mvp = proj * view * model;
 
 		// Create Shader Program
 		Shader shader("res/shaders/Basic.shader");
@@ -90,7 +98,7 @@ int main(void) {
 		texture.Bind();
 
 		// Set Uniforms
-		shader.SetUniformMat4f("u_MVP", proj);
+		shader.SetUniformMat4f("u_MVP", mvp);
 		shader.SetUniform4f("u_Color", 0.2f, 0.3f, 0.8f, 1.0f);
 		shader.SetUniform1i("u_Texture", 0);
 

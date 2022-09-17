@@ -72,7 +72,6 @@ int main(void) {
 		testMenu->RegisterTest<test::TestTexture2D>("2D Texture");
 
 		while (!glfwWindowShouldClose(window)) {
-			GLCall(glClearColor(0, 0, 0, 1));
 			renderer.Clear();
 
 			ImGui_ImplGlfwGL3_NewFrame();
